@@ -1,0 +1,14 @@
+<project>
+  <bannerLeft>
+    <name>CMPE - Code</name>
+    <src>logo.png</src>
+  </bannerLeft>
+	
+  <skin>
+    <groupId>org.apache.maven.skins</groupId>
+    <artifactId>maven-stylus-skin</artifactId>
+  </skin>
+  <body>
+    <menu ref="reports" />
+  </body>
+</project>
