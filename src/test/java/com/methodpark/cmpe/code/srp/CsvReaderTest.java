@@ -13,7 +13,6 @@ public class CsvReaderTest
 
     @Test
     public void getHeader_ValidFile_CorrectHeaderCount()
-            throws URISyntaxException, Exception
     {
         CsvReader reader = createCsvReader();
 
@@ -25,7 +24,6 @@ public class CsvReaderTest
 
     @Test
     public void getRecords_ValidFile_CorrectRecordCount()
-            throws URISyntaxException, Exception
     {
         CsvReader reader = createCsvReader();
 
@@ -40,15 +38,22 @@ public class CsvReaderTest
         Assert.assertEquals("1", firstRecord[0]);
     }
 
-    private CsvReader createCsvReader() throws Exception, URISyntaxException
+    private CsvReader createCsvReader()
     {
         CsvReader reader = new CsvReader(getTestFile());
         return reader;
     }
 
-    private URI getTestFile() throws URISyntaxException
+    private URI getTestFile()
     {
-        return CsvReaderTest.class.getResource("TestFile.csv").toURI();
+        try
+        {
+            return CsvReaderTest.class.getResource("TestFile.csv").toURI();
+        }
+        catch (URISyntaxException e)
+        {
+            return null;
+        }
     }
 
 }

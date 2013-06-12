@@ -1,5 +1,6 @@
 package com.methodpark.cmpe.code.dip;
 
-public class Todo {
-
+public enum LogType
+{
+    Unknown, Error
 }
