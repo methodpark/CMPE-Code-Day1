@@ -1,8 +1,12 @@
 package com.methodpark.cmpe.code.srp;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
-import java.util.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CsvReader
 {
@@ -48,30 +52,15 @@ public class CsvReader
     private List<String> readAllLinesOfFile()
     {
         List<String> lines = new ArrayList<String>();
-        BufferedReader bufferedReader = null;
         File file = new File(filename);
         try
         {
-            FileReader fileReader = new FileReader(file);
-            bufferedReader = new BufferedReader(fileReader);
-            String line;
-            while ((line = bufferedReader.readLine()) != null)
-            {
-                lines.add(line);
-            }
+            lines.addAll(Files.readAllLines(file.toPath(),
+                    Charset.defaultCharset()));
         }
-        catch (Exception e)
+        catch (IOException e)
         {
-        }
-        finally
-        {
-            try
-            {
-                bufferedReader.close();
-            }
-            catch (IOException e)
-            {
-            }
+            e.printStackTrace();
         }
         return lines;
     }

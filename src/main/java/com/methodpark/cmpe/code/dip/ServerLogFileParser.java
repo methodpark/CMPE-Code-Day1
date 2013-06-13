@@ -1,10 +1,10 @@
 package com.methodpark.cmpe.code.dip;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 public class ServerLogFileParser
 {
-    private ServerType type;
+    private ServerType serverType;
 
     private URI filename;
 
@@ -20,7 +20,7 @@ public class ServerLogFileParser
     {
         this.filename = filename;
 
-        type = DetermineLogType();
+        serverType = DetermineLogType();
     }
 
     public List<String> getErrors()
@@ -52,7 +52,7 @@ public class ServerLogFileParser
         String message = null;
         LogType logType = LogType.Unknown;
 
-        if (type == ServerType.Apache)
+        if (serverType == ServerType.Apache)
         {
             String logEntryPattern = "^\\[(.+)\\] \\[(.+)\\] \\[(.+)\\] (.+)";
             Pattern p = Pattern.compile(logEntryPattern);
@@ -66,7 +66,7 @@ public class ServerLogFileParser
                 }
             }
         }
-        else if (type == ServerType.IIS)
+        else if (serverType == ServerType.IIS)
         {
             String[] parts = line.split(",");
             if (parts[10].trim().equals("500"))
@@ -75,7 +75,7 @@ public class ServerLogFileParser
             }
             message = parts[14].trim();
         }
-        else if (type == ServerType.IIS)
+        else if (serverType == ServerType.IIS)
         {
 
         }
@@ -99,30 +99,15 @@ public class ServerLogFileParser
     private List<String> readAllLinesOfFile()
     {
         List<String> lines = new ArrayList<String>();
-        BufferedReader bufferedReader = null;
         File file = new File(filename);
         try
         {
-            FileReader fileReader = new FileReader(file);
-            bufferedReader = new BufferedReader(fileReader);
-            String line;
-            while ((line = bufferedReader.readLine()) != null)
-            {
-                lines.add(line);
-            }
+            lines.addAll(Files.readAllLines(file.toPath(),
+                    Charset.defaultCharset()));
         }
-        catch (Exception e)
+        catch (IOException e)
         {
-        }
-        finally
-        {
-            try
-            {
-                bufferedReader.close();
-            }
-            catch (IOException e)
-            {
-            }
+            e.printStackTrace();
         }
         return lines;
     }
