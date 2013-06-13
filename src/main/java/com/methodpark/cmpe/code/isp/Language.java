@@ -1,5 +1,7 @@
 package com.methodpark.cmpe.code.isp;
 
-public class Todo {
-
+public enum Language
+{
+    de, en
 }
+
