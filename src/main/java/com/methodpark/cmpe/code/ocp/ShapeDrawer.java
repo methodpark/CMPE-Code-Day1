@@ -1,6 +1,5 @@
 package com.methodpark.cmpe.code.ocp;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -11,88 +10,75 @@ import javax.swing.JPanel;
 public class ShapeDrawer extends JPanel
 {
     private static final long serialVersionUID = 1L;
+    private ArrayList<IShape> myShapesToDraw;
+    @SuppressWarnings("unused")
+    private JFrame myJFrame;
 
-    private Square squareToDraw;
-    private Circle circleToDraw;
-    
-    public void paint(Graphics g)
+    public ShapeDrawer(ArrayList<IShape> shapesToDraw )
     {
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.drawString("Shape Drawer", 10, 10);
-     
-        if (squareToDraw != null)
+        myShapesToDraw = shapesToDraw;
+        myJFrame = setupJFrame();
+    }
+
+    public void paint(Graphics graphics)
+    {    
+        Graphics2D graphics2d = setupGraphics(graphics);
+        
+        // we let the shape subclasses decide how they want to be drawn (but do not let them do the actual drawing) 
+        //   by letting them do the graphics setup
+        for ( IShape shape : myShapesToDraw )
         {
-            g2d.setColor(Color.BLUE);
-            g2d.fillRect(50, 50 , (int)squareToDraw.length, (int)squareToDraw.length);
-        }
-        if (circleToDraw != null)
-        {
-            g2d.setColor(Color.RED);
-            g2d.fillOval(100, 100, (int)circleToDraw.radius, (int)circleToDraw.radius);
+            shape.setupGraphics(graphics2d);
         }
     }
- 
-    public void drawShapes(ArrayList<Shape> shapes)
+
+    public void drawShapesInGui()
+    {
+        // we cannot delegate this to the shape subclasses, because we need to call the overwritten (re-)paint methods here.
+        // if we let the subclasses do this, too, then they would be far more than just "shapes" - they would
+        // be "shapeDrawers"
+        repaint();
+    }   
+
+    public void drawShapesOnConsole()
+    {
+        // let the subclasses decide how they are drawn on the console.
+        for ( IShape shapeToDraw : myShapesToDraw )
+        {
+            shapeToDraw.drawOnConsole();
+        }        
+    }
+
+    private JFrame setupJFrame()
     {
         JFrame frame = new JFrame("My Shape Drawer");
         frame.add(this);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(280, 240);
         frame.setLocationRelativeTo(null);
-        frame.setVisible(true);        
-        
-        for (Shape shape : shapes)
-        {
-            switch (shape.itsType)
-            {
-            case square:
-                squareToDraw = (Square) shape;
-                repaint();
-                break;
-            case circle:
-                circleToDraw = (Circle) shape;
-                repaint();
-                break;
-            }
-        }
-    }
-    
-    public void drawShapesOnConsole(ArrayList<Shape> shapes)
-    {
-        for (Shape shape : shapes)
-        {
-            switch (shape.itsType)
-            {
-            case square:
-                printSquare(((Square) shape).getLength());
-                break;
-            case circle:
-                printCircle(((Circle) shape).getRadius());
-                break;
-            }
-        }
+        frame.setVisible(true);
+        return frame;
     }
 
-    void printSquare(double length)
+    private Graphics2D setupGraphics(Graphics graphics)
     {
-        System.out.println("drawing square with side lengh " + length);
+        Graphics2D graphics2d = (Graphics2D) graphics;
+        graphics2d.drawString("Shape Drawer", 10, 10);
+        return graphics2d;
     }
 
-    void printCircle(double radius)
-    {
-        System.out.println("drawing circle with radius " + radius);
-    }
-
-    
     public static void main(String[] args)
     {
-        ArrayList<Shape> shapes = new ArrayList<Shape>();
-        
-        shapes.add(new Circle(30));
-        shapes.add(new Square(20));
-        
-        ShapeDrawer drawer = new ShapeDrawer(); 
-        drawer.drawShapesOnConsole(shapes);
-        drawer.drawShapes(shapes);
+        IShape circle = new Circle(30);
+        IShape square = new Square(20);
+        IShape rectangle = new Rectangle(30, 50);
+        ArrayList<IShape> shapes = new ArrayList<IShape>();
+        shapes.add( circle );
+        shapes.add( square );
+        shapes.add( rectangle );
+
+        ShapeDrawer drawer = new ShapeDrawer( shapes ); 
+        drawer.drawShapesOnConsole();
+        drawer.drawShapesInGui();
     }
 }
