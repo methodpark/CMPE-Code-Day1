@@ -23,7 +23,7 @@ public class SimUDuck
         // That is why some basic behaviors inherited from "Duck" do not apply to the concrete classes.
         // But, as the subclasses HAVE to implement them, they override them with empty implementation,
         //   which "surprises", because that's not what we expect, looking at the Duck base class
-        // That is exactly what Liskov says in his principle.
+        // That is exactly what Liskov says in her principle.
         // In essence, there is a fundamental design flaw here: We want objects that are not REAL instances of the
         //   abstraction (like wooden duck) to deal with any method call the abstraction promises (like quacking)
         // This can't work, and thus there is no meaningful solution.
