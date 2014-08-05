@@ -13,7 +13,8 @@ public class ServerLogFileParserTest
     @Test
     public void parseApacheLog_ValidFile_CorrectErrorCount()
     {
-        ServerLogFileParser parser = createLogFileParser(ServerType.Apache);
+        ApacheLog apacheLog = createApacheLog();
+        ServerLogFileParser parser = new ServerLogFileParser(apacheLog);
 
         List<String> errors = parser.getErrors();
         Assert.assertEquals(4, errors.size());
@@ -21,36 +22,18 @@ public class ServerLogFileParserTest
                 JUnitMatchers.containsString("authentication failure"));
     }
 
-    @Test
-    public void parseIISLog_ValidFile_CorrectErrorCount()
+    private ApacheLog createApacheLog()
     {
-        ServerLogFileParser parser = createLogFileParser(ServerType.IIS);
-
-        List<String> errors = parser.getErrors();
-        Assert.assertEquals(2, errors.size());
-        Assert.assertEquals("Bad URI request", errors.get(1));
-    }
-
-    private ServerLogFileParser createLogFileParser(ServerType serverType)
-    {
-        URI logFile = null;
+        ApacheLog apacheLog = null;
         try
         {
-            if (serverType == ServerType.Apache)
-            {
-                logFile = ServerLogFileParserTest.class
-                        .getResource("error_log").toURI();
-            }
-            else if (serverType == ServerType.IIS)
-            {
-                logFile = ServerLogFileParserTest.class.getResource("HTTPERR")
-                        .toURI();
-            }
+            URI logFile = ServerLogFileParserTest.class
+			     .getResource("error_log").toURI();
+            apacheLog = new ApacheLog(logFile);
         }
         catch (URISyntaxException e)
         {
         }
-        return new ServerLogFileParser(logFile);
+        return apacheLog;
     }
-
 }

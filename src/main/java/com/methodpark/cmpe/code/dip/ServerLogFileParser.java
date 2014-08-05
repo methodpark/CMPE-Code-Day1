@@ -1,33 +1,22 @@
 package com.methodpark.cmpe.code.dip;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 // this class depends strongly on a concrete ServerType
 public class ServerLogFileParser
 {
-    private ServerType serverType;
+    private ApacheLog apacheLog;
 
-    private URI filename;
-
-    public ServerLogFileParser(URI filename)
+    public ServerLogFileParser(ApacheLog apacheLog)
     {
-        this.filename = filename;
-
-        serverType = DetermineLogType();
+        this.apacheLog = apacheLog;
     }
 
     public List<String> getErrors()
     {
         List<String> errors = new ArrayList<String>();
-        List<LogEntry> logEntries = loadLogEntries();
+        List<LogEntry> logEntries = apacheLog.loadLogEntries();
         for (LogEntry logEntry : logEntries)
         {
             if (logEntry.getLogType() == LogType.Error)
@@ -36,85 +25,5 @@ public class ServerLogFileParser
             }
         }
         return errors;
-    }
-
-    private List<LogEntry> loadLogEntries()
-    {
-        List<LogEntry> logEntries = new ArrayList<LogEntry>();
-        for (String line : readAllLinesOfFile())
-        {
-            logEntries.add(createLogEntry(line));
-        }
-        return logEntries;
-    }
-
-    // what this fct does is: 1) determine server type and 2) determine log entry type
-    private LogEntry createLogEntry(String line)
-    {
-        String message = null;
-        LogType logType = LogType.Unknown;
-        
-        // this depends on the serverType!
-        // we should not let this class interact directly with the logEntry
-        // instead, create a common abstraction like ""
-        if (serverType == ServerType.Apache)
-        {
-            String logEntryPattern = "^\\[(.+)\\] \\[(.+)\\] \\[(.+)\\] (.+)";
-            Pattern p = Pattern.compile(logEntryPattern);
-            Matcher matcher = p.matcher(line);
-            if (matcher.matches())
-            {
-                // group(4)?! wtf?
-                message = matcher.group(4);
-                if (matcher.group(2).equals("error"))
-                {
-                    logType = LogType.Error;
-                }
-            }
-        }
-        else if (serverType == ServerType.IIS)
-        {
-            String[] parts = line.split(",");
-            if (parts[10].trim().equals("500"))
-            {
-                logType = LogType.Error;
-            }
-            message = parts[14].trim();
-        }
-        else if (serverType == ServerType.IIS)
-        {
-
-        }
-        return new LogEntry(logType, message);
-    }
-
-    private ServerType DetermineLogType()
-    {
-        ServerType type = ServerType.Unknown;
-        if (filename.toString().contains("error_log"))
-        {
-            type = ServerType.Apache;
-        }
-        else if (filename.toString().contains("HTTPERR"))
-        {
-            type = ServerType.IIS;
-        }
-        return type;
-    }
-
-    private List<String> readAllLinesOfFile()
-    {
-        List<String> lines = new ArrayList<String>();
-        File file = new File(filename);
-        try
-        {
-            lines.addAll(Files.readAllLines(file.toPath(),
-                    Charset.defaultCharset()));
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        return lines;
     }
 }
