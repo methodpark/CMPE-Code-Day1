@@ -11,11 +11,7 @@ public class EnglishToGermanTranslator
     {
         IFileTranslator deTranslator = TranslatorFactory.createTranslator(Language.de);
 
-        // all of the following should be at least moved to e.g. translator.promptForInput()
-        //  or at least into a method in this class
         System.out.println("Translating english to german.");
-        // btw this is very bad! we should ask the translator which words it can translate,
-        //   not statically print that!
         System.out.println("Supported words so far: \n" +
         		"dog, cat, house, duck.");
         System.out.println("Please enter text to translate - line by line:");

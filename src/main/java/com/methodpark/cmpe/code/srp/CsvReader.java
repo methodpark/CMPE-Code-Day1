@@ -8,12 +8,6 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
-// this class does too much stuff.
-// i.e. reading files, parsing strings as csv input and parsing tem.
-// we could create a FileReader that holds a string[] for the lines of the file
-//   and a CsvParser that can do parse(string[] lines) on those lines 
-//   and a CsvRecordsHolder that holds the results.
-// all of that is mixed up in this class that, misleadingly only is called CsvReader class.
 public class CsvReader
 {
     private URI filename;
@@ -43,10 +37,9 @@ public class CsvReader
     {
         for (String line : readAllLinesOfFile())
         {
-            // this if block can be move outside the for loop
             if (header == null)
             {
-                readFirstLineAsHeader(line);
+                parseHeader(line);
             }
             else
             {
@@ -72,7 +65,7 @@ public class CsvReader
         return lines;
     }
 
-    private void readFirstLineAsHeader(String line)
+    private void parseHeader(String line)
     {
         header = parseRecord(line);
     }

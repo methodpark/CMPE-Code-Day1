@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-// this class depends strongly on a concrete ServerType
 public class ServerLogFileParser
 {
     private ServerType serverType;
@@ -48,15 +47,11 @@ public class ServerLogFileParser
         return logEntries;
     }
 
-    // what this fct does is: 1) determine server type and 2) determine log entry type
     private LogEntry createLogEntry(String line)
     {
         String message = null;
         LogType logType = LogType.Unknown;
-        
-        // this depends on the serverType!
-        // we should not let this class interact directly with the logEntry
-        // instead, create a common abstraction like ""
+
         if (serverType == ServerType.Apache)
         {
             String logEntryPattern = "^\\[(.+)\\] \\[(.+)\\] \\[(.+)\\] (.+)";
@@ -64,7 +59,6 @@ public class ServerLogFileParser
             Matcher matcher = p.matcher(line);
             if (matcher.matches())
             {
-                // group(4)?! wtf?
                 message = matcher.group(4);
                 if (matcher.group(2).equals("error"))
                 {

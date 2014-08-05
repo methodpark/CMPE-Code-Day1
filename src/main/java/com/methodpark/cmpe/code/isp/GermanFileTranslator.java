@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.HashMap;
 
-// this class is forced to implement the loadFile method, although it really does not 'need' it.
-// it should only implement something like  ITranslator.
 public class GermanFileTranslator implements IFileTranslator {
     
     HashMap<String,String> dict = new HashMap<String, String>();
