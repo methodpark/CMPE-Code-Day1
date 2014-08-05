@@ -44,11 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApacheLog.cs" />
+    <Compile Include="IisLog.cs" />
     <Compile Include="LogEntry.cs" />
     <Compile Include="LogType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerLogFileParser.cs" />
-    <Compile Include="ServerType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -50,8 +50,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IisLogFileTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerLogFileParserTests.cs" />
+    <Compile Include="TestUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\..\..\resources\com\methodpark\cmpe\code\dip\error_log">
