@@ -1,15 +1,16 @@
 using System.IO;
 using Dip;
 using FluentAssertions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DipTests
 {
+    [TestClass]
     public class ServerLogFileParserTest
     {
         private string logFile;
 
-        [Test]
+        [TestMethod]
         public void ParseApacheLog_ValidFile_CorrectErrorCount()
         {
             var apacheLog = CreateApacheLog();
@@ -20,7 +21,7 @@ namespace DipTests
             errors[3].Should().Contain("authentication failure");
         }
 
-        [TearDown]
+        [TestCleanup]
         public void TearDown()
         {
             File.Delete(logFile);

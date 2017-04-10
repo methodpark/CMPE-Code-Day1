@@ -1,13 +1,14 @@
 ﻿using System.Linq;
 using Dip;
 using FluentAssertions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DipTests
 {
+    [TestClass]
     public class IisLogFileTests
     {
-        [Test]
+        [TestMethod]
         public void ReadLogEntires_ValidFile_ReturnsCorrectEntires()
         {
             var logFile = TestUtils.ExtractResourceToFile("DipTests.Resources.HTTPERR");

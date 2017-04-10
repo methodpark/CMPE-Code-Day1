@@ -1,13 +1,14 @@
 using System.IO;
 using FluentAssertions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Srp;
 
 namespace SrpTests
 {
+    [TestClass]
     public class CsvReaderTest
     {
-        [Test]
+        [TestMethod]
         public void GetHeader_ValidFile_CorrectHeaderCount()
         {
             var reader = CreateCsvReader();
@@ -17,7 +18,7 @@ namespace SrpTests
             header[0].Should().Be("Record1");
         }
 
-        [Test]
+        [TestMethod]
         public void GetRecords_ValidFile_CorrectRecordCount()
         {
             var reader = CreateCsvReader();
