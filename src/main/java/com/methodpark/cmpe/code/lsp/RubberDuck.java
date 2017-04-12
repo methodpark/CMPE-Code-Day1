@@ -21,7 +21,7 @@ public class RubberDuck extends Duck
 
     void squeek()
     {
-        System.out.println("squeek");
+        System.out.println("squeak");
     }
 
 }
