@@ -10,7 +10,7 @@ import org.junit.Test;
 public class IisLogFileTest 
 {
     @Test
-    public void readLogEntries_ValidFile_ReturnsCorrectEntries()
+    public void readLogEntires_ValidFile_ReturnsCorrectEntires()
     {
         IisLog iisLog = createIisLog();
 
